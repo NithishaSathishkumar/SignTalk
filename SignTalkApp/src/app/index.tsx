@@ -11,7 +11,7 @@ import {
 import SectionListItem from "../components/core/SectionListItem";
 
 const sections = [
-  { id: "about", name: "About" },
+  { id: "about", name: "About Our App" },
   { id: "rtt", name: "Real-Time Translation" },
   { id: "3", name: "Section 3" },
   { id: "4", name: "Section 4" },
