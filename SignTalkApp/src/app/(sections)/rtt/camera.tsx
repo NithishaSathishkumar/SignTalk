@@ -15,19 +15,36 @@ const CameraScreen = () => {
     }, [hasPermission]);
 
     if (!hasPermission) {
-        return <ActivityIndicator />;
+        return (
+            <SafeAreaView style={styles.centered}>
+                <Text>Requesting camera permissions...</Text>
+                <ActivityIndicator />
+            </SafeAreaView>
+        );
     }
     if (!device) {
-        return<Text>Camera Device not found</Text>
+        return (
+            <SafeAreaView style={styles.centered}>
+                <Text>Camera Device not found</Text>
+            </SafeAreaView>
+        );
     }
 
     return(
-        <SafeAreaView>
+        <SafeAreaView style={{flex: 1}}>
             <Stack.Screen options={{ headerShown: false }}></Stack.Screen>
             <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
         </SafeAreaView> 
     
     );
 };
+
+const styles = StyleSheet.create({
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
+});
 
 export default CameraScreen;
