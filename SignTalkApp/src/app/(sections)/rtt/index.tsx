@@ -8,7 +8,7 @@ const description = 'Uses Real Time Camera to Translation, American Sign Languag
 const RTT = () => {
     return (
         <SafeAreaView edges={['bottom']} style={{ flex: 1 }}>
-            <Stack.Screen options={{ title: 'Real Time Translation Page' }}></Stack.Screen>
+            <Stack.Screen options={{ title: 'Real Time Translation Page', headerShown: false}}></Stack.Screen>
             <MarkdownDisplay>{description}</MarkdownDisplay>
             {/* <Link href={"rtt/camera"} asChild>
                 {/* <Button title="Go to Real Time Camera"></Button> }

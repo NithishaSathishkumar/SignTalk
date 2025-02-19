@@ -4,7 +4,9 @@ from flask import Blueprint
 import os
 import cv2
 
-DATA_DIR = './data'
+# DATA_DIR = './data'
+DATA_DIR = 'SignTalkApp/data'
+
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 

@@ -5,7 +5,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # Load data from the pickle file
-data_dict = pickle.load(open('./data.pickle', 'rb'))
+# data_dict = pickle.load(open('./data.pickle', 'rb'))
+data_dict = pickle.load(open('SignTalkApp/data.pickle', 'rb'))
+
 
 # Extract data and labels
 data = np.asarray(data_dict['data'])
