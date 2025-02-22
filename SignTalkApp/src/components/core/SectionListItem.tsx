@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import { Link } from "expo-router";
-
+import React from "react";
 type SectionListItem = {
   id: string;
   name: string;

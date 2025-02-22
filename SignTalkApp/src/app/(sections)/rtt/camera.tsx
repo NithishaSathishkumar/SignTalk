@@ -1,5 +1,6 @@
 import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
 import { useEffect } from "react";
+import React from "react";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {

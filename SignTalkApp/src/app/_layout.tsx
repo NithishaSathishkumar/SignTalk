@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 import { useFonts, Inter_900Black } from "@expo-google-fonts/inter";
 import { useEffect } from "react";
 import * as SplashScreen from "expo-splash-screen";
+import React from "react";
 
 export function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({

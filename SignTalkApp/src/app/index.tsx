@@ -7,7 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-
+import React from "react";
 import SectionListItem from "../components/core/SectionListItem";
 
 const sections = [
