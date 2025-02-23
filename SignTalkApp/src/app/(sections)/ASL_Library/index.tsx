@@ -4,12 +4,16 @@ import {
   Text,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Animatable from "react-native-animatable";
 
 const About = () => {
+  const router = useRouter();
+
   return (
     <ScrollView style={styles.container}>
       <Stack.Screen

@@ -1,102 +1,23 @@
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
-import { useEffect } from "react";
-import React from "react";
-import { Stack } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  useCameraPermission,
-  useCameraDevice,
-  Camera,
-} from "react-native-vision-camera";
-
-const CameraScreen = () => {
-  const device = useCameraDevice("front");
-  const { hasPermission, requestPermission } = useCameraPermission();
-
-  useEffect(() => {
-    if (!hasPermission) {
-      requestPermission();
-    }
-  }, [hasPermission]);
-
-  if (!hasPermission) {
-    return (
-      <SafeAreaView style={styles.centered}>
-        <Text>Requesting camera permissions...</Text>
-        <ActivityIndicator />
-      </SafeAreaView>
-    );
-  }
-  if (!device) {
-    return (
-      <SafeAreaView style={styles.centered}>
-        <Text>Camera Device not found</Text>
-      </SafeAreaView>
-    );
-  }
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <Stack.Screen options={{ headerShown: false }}></Stack.Screen>
-      <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
-    </SafeAreaView>
-  );
-};
-
-const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
-
-export default CameraScreen;
-
-// import React, { useEffect, useState } from "react";
 // import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+// import { useEffect } from "react";
+// import React from "react";
+// import { Stack } from "expo-router";
 // import { SafeAreaView } from "react-native-safe-area-context";
-// import { useCameraPermission, useCameraDevice, Camera } from "react-native-vision-camera";
-// import { useFrameProcessor } from "react-native-vision-camera";
-// import { runOnJS } from "react-native-reanimated";
-// import { captureFrame } from "/Users/nithishasathishkumar/SignTalk/SignTalkApp/src/app/(sections)/rtt/utils/captureFrame"; // Ensure this path is correct
+// import {
+//   useCameraPermission,
+//   useCameraDevice,
+//   Camera,
+// } from "react-native-vision-camera";
 
 // const CameraScreen = () => {
 //   const device = useCameraDevice("front");
 //   const { hasPermission, requestPermission } = useCameraPermission();
-//   const [prediction, setPrediction] = useState<string | null>(null);
 
 //   useEffect(() => {
 //     if (!hasPermission) {
 //       requestPermission();
 //     }
 //   }, [hasPermission]);
-
-//   const frameProcessor = useFrameProcessor((frame) => {
-//     "worklet";
-//     try {
-//       runOnJS(processFrame)(frame); // Use runOnJS to call the async function from JS thread
-//     } catch (error) {
-//       runOnJS(console.error)("Frame Processor Error:", error);
-//     }
-//   }, []);
-
-//   const processFrame = (frame: any) => {
-//     captureFrame(frame).then(async (base64Image) => {
-//       try {
-//         const response = await fetch("http://your-backend-ip:5001/predict", {
-//           method: "POST",
-//           headers: { "Content-Type": "application/json" },
-//           body: JSON.stringify({ image: base64Image }),
-//         });
-
-//         const data = await response.json();
-//         setPrediction(data.prediction);
-//       } catch (error) {
-//         console.error("Error processing frame:", error);
-//       }
-//     });
-//   };
 
 //   if (!hasPermission) {
 //     return (
@@ -116,17 +37,8 @@ export default CameraScreen;
 
 //   return (
 //     <SafeAreaView style={{ flex: 1 }}>
-//       <Camera
-//         style={StyleSheet.absoluteFill}
-//         device={device}
-//         isActive={true}
-//         frameProcessor={frameProcessor}
-//       />
-//       <View style={styles.predictionBox}>
-//         <Text style={styles.predictionText}>
-//           {prediction ? `Prediction: ${prediction}` : "Processing..."}
-//         </Text>
-//       </View>
+//       <Stack.Screen options={{ headerShown: false }}></Stack.Screen>
+//       <Camera style={StyleSheet.absoluteFill} device={device} isActive={true} />
 //     </SafeAreaView>
 //   );
 // };
@@ -137,18 +49,113 @@ export default CameraScreen;
 //     justifyContent: "center",
 //     alignItems: "center",
 //   },
-//   predictionBox: {
-//     position: "absolute",
-//     bottom: 50,
-//     left: 50,
-//     backgroundColor: "rgba(0, 0, 0, 0.6)",
-//     padding: 10,
-//     borderRadius: 10,
-//   },
-//   predictionText: {
-//     color: "#fff",
-//     fontSize: 20,
-//   },
 // });
 
 // export default CameraScreen;
+
+import React, { useRef, useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  Button,
+  Alert,
+} from "react-native";
+import { Stack } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  useCameraPermission,
+  useCameraDevice,
+  Camera,
+  PhotoFile,
+} from "react-native-vision-camera";
+import axios, { AxiosError } from "axios";
+
+const CameraScreen: React.FC = () => {
+  const device = useCameraDevice("front");
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const camera = useRef<Camera>(null);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!hasPermission) {
+      requestPermission();
+    }
+  }, [hasPermission]);
+
+  const captureImage = async () => {
+    if (camera.current) {
+      setIsProcessing(true);
+      try {
+        const photo: PhotoFile = await camera.current.takePhoto();
+        const formData = new FormData();
+        formData.append("file", {
+          uri: `file://${photo.path}`,
+          name: "photo.jpg",
+          type: "image/jpeg",
+        } as unknown as Blob); // Cast to Blob for TypeScript compatibility
+
+        const response = await axios.post<{ prediction: string }>(
+          "http://192.168.12.184:5001/predict",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        Alert.alert("Prediction", `Prediction: ${response.data.prediction}`);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        console.error("Error processing image:", axiosError.message);
+        Alert.alert("Error", "Failed to process image. Please try again.");
+      } finally {
+        setIsProcessing(false);
+      }
+    }
+  };
+
+  if (!hasPermission) {
+    return (
+      <SafeAreaView style={styles.centered}>
+        <Text>Requesting camera permissions...</Text>
+        <ActivityIndicator />
+      </SafeAreaView>
+    );
+  }
+
+  if (!device) {
+    return (
+      <SafeAreaView style={styles.centered}>
+        <Text>Camera Device not found</Text>
+      </SafeAreaView>
+    );
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Stack.Screen options={{ headerShown: false }} />
+      <Camera
+        ref={camera}
+        style={StyleSheet.absoluteFill}
+        device={device}
+        isActive={true}
+        photo={true}
+      />
+      <Button title="Capture" onPress={captureImage} disabled={isProcessing} />
+      {isProcessing && <ActivityIndicator size="large" color="#0000ff" />}
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+
+export default CameraScreen;

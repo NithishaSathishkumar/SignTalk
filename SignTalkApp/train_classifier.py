@@ -40,5 +40,5 @@ score = accuracy_score(y_predict, y_test)
 print('{}% of samples were classified correctly!'.format(score * 100))
 
 # Save the trained model
-with open('model.p', 'wb') as f:
+with open('SignTalkApp/model.p', 'wb') as f:
     pickle.dump({'model': model}, f)

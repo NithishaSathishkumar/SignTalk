@@ -1,6 +1,8 @@
-import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable } from "react-native";
 import { Link } from "expo-router";
 import React from "react";
+import Animated, { FadeIn, FadeOut, ZoomIn } from "react-native-reanimated";
+
 type SectionListItem = {
   id: string;
   name: string;
@@ -18,13 +20,13 @@ export default function SectionListItem({ id, name }: SectionListItem) {
 
 const styles = StyleSheet.create({
   box: {
-    backgroundColor: "#f5cac3",
+    backgroundColor: "#A8DADC",
     flex: 1,
     aspectRatio: 1,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: "#f28482",
+    borderColor: "#F1FAEE",
     borderRadius: 18,
   },
 

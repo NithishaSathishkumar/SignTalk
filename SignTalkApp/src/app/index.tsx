@@ -1,29 +1,26 @@
-// "main": "index.ts",
 import { StatusBar } from "expo-status-bar";
-import {
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import React from "react";
 import SectionListItem from "../components/core/SectionListItem";
 
 const sections = [
   { id: "about", name: "About Our App" },
   { id: "rtt", name: "Real-Time Translation" },
-  { id: "3", name: "Section 3" },
-  { id: "4", name: "Section 4" },
+  { id: "ASL_Library", name: "ASL Library" },
+  { id: "Tutorials", name: "Tutorials" },
+  { id: "Contact", name: "Contact Us" },
+  { id: "Report", name: "Report Issues" },
 ];
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
+      {/* App Title */}
       {/* <View style={styles.appTitle}>
         <Text style={styles.titleText}>SignTalk</Text>
       </View> */}
 
+      {/* Section Grid */}
       <FlatList
         data={sections}
         contentContainerStyle={styles.content}
@@ -41,7 +38,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#F1FAEE", // Matches About Page background
     gap: 10,
   },
 
@@ -56,15 +53,16 @@ const styles = StyleSheet.create({
 
   appTitle: {
     flexDirection: "row",
-    // borderRadius: 60,
     padding: 10,
     height: 100,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f28482",
+    backgroundColor: "#457B9D", // Matches the navigation bar color
   },
 
   titleText: {
-    fontSize: 60,
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "#F1FAEE", // Light text for contrast
   },
 });

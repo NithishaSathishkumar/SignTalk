@@ -13,7 +13,7 @@ const MarkdownDisplay = ({ children }: PropsWithChildren) => {
 const markdownStyles = StyleSheet.create({
   heading1: {
     fontFamily: "InterBlack",
-    color: "#212020",
+    color: "#1D3557",
     marginTop: 15,
     marginBottom: 10,
 
@@ -21,7 +21,7 @@ const markdownStyles = StyleSheet.create({
   },
   heading2: {
     fontFamily: "InterBold",
-    color: "#404040",
+    color: "#1D3557",
 
     marginTop: 10,
     marginBottom: 5,
@@ -36,7 +36,7 @@ const markdownStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: "white",
+    backgroundColor: "#F1FAEE",
     flex: 1,
     padding: 10,
     borderRadius: 10,
