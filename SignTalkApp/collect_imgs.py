@@ -10,8 +10,8 @@ DATA_DIR = 'SignTalkApp/data'
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-number_of_classes = 33
-dataset_size = 100
+number_of_classes = 25
+dataset_size = 99
 
 cap = cv2.VideoCapture(0)
 for j in range(number_of_classes):
