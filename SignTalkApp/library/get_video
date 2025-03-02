@@ -11,6 +11,8 @@ def download_dataset():
         os.makedirs(download_path)
         kaggle.api.dataset_download_files(dataset_name, path=download_path, unzip=True)
         print(f"Dataset downloaded to: {download_path}")
+        delete_extra_videos(dataset_sl_path)
+
     else:
         print("Dataset already exists. Skipping download.")
 
@@ -18,6 +20,24 @@ def download_dataset():
     dataset_sl_path = os.path.join(download_path, 'dataset', 'SL')
     return dataset_sl_path
 
+def delete_extra_videos(dataset_path):
+    # List all word directories in the dataset folder
+    word_directories = [f for f in os.listdir(dataset_path) if os.path.isdir(os.path.join(dataset_path, f))]
+
+    for word in word_directories:
+        word_path = os.path.join(dataset_path, word)
+        
+        # List all video files for the word (assuming .mp4 files)
+        video_files = [f for f in os.listdir(word_path) if f.endswith('.mp4')]
+        
+        # If there are multiple videos for the word, delete all but the first
+        if len(video_files) > 1:
+            for video_file in video_files[1:]:  # Skip the first one
+                video_file_path = os.path.join(word_path, video_file)
+                os.remove(video_file_path)  # Delete the extra video files
+                print(f"Deleted: {video_file_path}")
+        else:
+            print(f"Only one video found for word '{word}', no files deleted.")
 def get_video_for_word(word, dataset_path):
     # Construct the word path from the dataset
     word_path = os.path.join(dataset_path, word)
