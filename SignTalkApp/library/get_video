@@ -1,0 +1,54 @@
+import os
+import kaggle
+
+def download_dataset():
+    # Define the dataset name and the download path
+    dataset_name = "waseemnagahhenes/sign-language-dataset-wlasl-videos"
+    download_path = os.path.join(os.getcwd(), "sign-language-dataset")
+
+    # Check if the dataset folder exists, if not, download the dataset
+    if not os.path.exists(download_path):
+        os.makedirs(download_path)
+        kaggle.api.dataset_download_files(dataset_name, path=download_path, unzip=True)
+        print(f"Dataset downloaded to: {download_path}")
+    else:
+        print("Dataset already exists. Skipping download.")
+
+    # Return the path to the specific folder within the dataset
+    dataset_sl_path = os.path.join(download_path, 'dataset', 'SL')
+    return dataset_sl_path
+
+def get_video_for_word(word, dataset_path):
+    # Construct the word path from the dataset
+    word_path = os.path.join(dataset_path, word)
+    print(word_path)
+
+    # If the word path does not exist, return None
+    if not os.path.exists(word_path):
+        print(f"Word '{word}' not found in dataset!")
+        return None
+    
+    # List all video files for the word (assuming .mp4 files)
+    video_files = [f for f in os.listdir(word_path) if f.endswith('.mp4')]  
+    
+    # If no videos are found for the word
+    if not video_files:
+        print(f"No videos found for word '{word}'!")
+        return None
+    
+    # Return the first video file (you can modify to select a random video if needed)
+    video_path = os.path.join(word_path, video_files[0])
+    return video_path
+
+# Example usage:
+dataset_path = download_dataset()
+print('Dataset path:', dataset_path)
+
+word = "a"  # Replace with the word you are looking for
+video_path = get_video_for_word(word, dataset_path)
+
+if video_path:
+    print(f"Video for word '{word}': {video_path}")
+    # Here you can use video_path to display or play the video in your app
+else:
+    print("No video found.")
