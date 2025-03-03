@@ -1,84 +1,3 @@
-// import React, { useState } from "react";
-// import { View, TextInput, FlatList, Text, StyleSheet } from "react-native";
-// import Video from "react-native-video";
-
-// const App = () => {
-//   const [query, setQuery] = useState("");
-//   const [results, setResults] = useState([]);
-//   const [selectedVideo, setSelectedVideo] = useState(null);
-
-//   const searchVideos = async () => {
-//     try {
-//       console.log("Search query:", query); // Log query
-//       const response = await fetch(
-//         `http://192.168.12.184:5001/search?query=${query}`
-//       );
-//       console.log("Response status:", response.status); // Log status
-//       const data = await response.json();
-//       console.log("Response data:", data); // Log data
-//       setResults(data);
-//     } catch (error) {
-//       console.error("Error fetching videos:", error);
-//     }
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <TextInput
-//         style={styles.searchBar}
-//         placeholder="Search for a sign..."
-//         value={query}
-//         onChangeText={setQuery}
-//         onSubmitEditing={searchVideos}
-//       />
-//       <FlatList
-//         data={results}
-//         keyExtractor={(item) => item.path}
-//         renderItem={({ item }) => (
-//           <Text
-//             style={styles.resultItem}
-//             onPress={() => setSelectedVideo(item.path)}
-//           >
-//             {item.name}
-//           </Text>
-//         )}
-//       />
-//       {selectedVideo && (
-//         <Video
-//           source={{ uri: `http://192.168.12.184:5001/video/${selectedVideo}` }}
-//           style={styles.videoPlayer}
-//           controls={true}
-//           onError={(error) => console.error("Video Error:", error)}
-//         />
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 16,
-//   },
-//   searchBar: {
-//     height: 40,
-//     borderColor: "gray",
-//     borderWidth: 1,
-//     paddingHorizontal: 8,
-//     marginBottom: 16,
-//   },
-//   resultItem: {
-//     padding: 8,
-//     fontSize: 16,
-//   },
-//   videoPlayer: {
-//     width: "100%",
-//     height: 300,
-//   },
-// });
-
-// export default App;
-
 import React, { useState } from "react";
 import {
   View,
@@ -87,6 +6,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import Video from "react-native-video";
 
@@ -94,20 +14,27 @@ const App = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const searchVideos = async () => {
+    if (!query.trim()) return;
+    setLoading(true);
     try {
-      console.log("Search query:", query);
       const response = await fetch(
         `http://192.168.12.184:5001/search?query=${query}`
       );
-      console.log("Response status:", response.status);
       const data = await response.json();
-      console.log("Response data:", data);
       setResults(data);
     } catch (error) {
       console.error("Error fetching videos:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const closeVideo = () => {
+    setSelectedVideo(null);
+    setQuery(""); // Clear search when tab closes
   };
 
   return (
@@ -116,11 +43,15 @@ const App = () => {
       <TextInput
         style={styles.searchBar}
         placeholder="🔎 Search for a sign..."
-        placeholderTextColor="gray"
+        placeholderTextColor="#aaa"
         value={query}
         onChangeText={setQuery}
         onSubmitEditing={searchVideos}
       />
+
+      {/* Loading Indicator */}
+      {loading && <ActivityIndicator size="large" color="#f05454" />}
+
       {/* Search Results List */}
       <FlatList
         data={results}
@@ -134,17 +65,21 @@ const App = () => {
           </TouchableOpacity>
         )}
         ListEmptyComponent={
-          <Text style={styles.noResultsText}>No results found</Text>
+          !loading && <Text style={styles.noResultsText}>No results found</Text>
         }
       />
+
       {/* Video Player */}
       {selectedVideo && (
-        <View style={styles.videoContainer}>
+        <View style={styles.videoOverlay}>
           <Video
-            source={{ uri: `http://192.168.12.184:5001/video/${selectedVideo}` }}
+            source={{
+              uri: `http://192.168.12.184:5001/video/${selectedVideo}`,
+            }}
             style={styles.videoPlayer}
             controls={true}
             resizeMode="contain"
+            repeat
             onError={(error) => console.error("Video Error:", error)}
           />
           <TouchableOpacity
@@ -167,21 +102,31 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     height: 50,
-    borderRadius: 8,
+    borderRadius: 25,
     borderWidth: 1,
     borderColor: "#d0d0d0",
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
     backgroundColor: "#ffffff",
     marginBottom: 16,
     fontSize: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   resultItem: {
     padding: 12,
     backgroundColor: "#ffffff",
-    borderRadius: 8,
-    borderColor: "#dcdcdc",
+    borderRadius: 10,
     borderWidth: 1,
+    borderColor: "#dcdcdc",
     marginBottom: 8,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   resultText: {
     fontSize: 16,
@@ -193,29 +138,34 @@ const styles = StyleSheet.create({
     color: "#999999",
     fontSize: 14,
   },
-  videoContainer: {
-    marginTop: 16,
-    alignItems: "center",
+  videoOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.8)",
     justifyContent: "center",
+    alignItems: "center",
   },
   videoPlayer: {
-    width: "100%",
+    width: "90%",
     height: 300,
     backgroundColor: "#000000",
-    borderRadius: 8,
+    borderRadius: 10,
   },
   closeButton: {
-    marginTop: 8,
-    padding: 10,
+    marginTop: 10,
+    padding: 12,
     backgroundColor: "#f05454",
-    borderRadius: 6,
+    borderRadius: 8,
     alignItems: "center",
   },
   closeButtonText: {
     color: "#ffffff",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
 export default App;
-
