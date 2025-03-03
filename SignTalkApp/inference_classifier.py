@@ -3,7 +3,6 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-# model_dict = pickle.load(open('./model.p', 'rb'))
 model_dict = pickle.load(open('SignTalkApp/model.p', 'rb'))
 
 model = model_dict['model']
@@ -72,8 +71,6 @@ while True:
 
     except Exception as e:
         pass
-        # print(e)
-        # print("Error during prediction:", e)
 
     cv2.imshow('frame', frame)
 

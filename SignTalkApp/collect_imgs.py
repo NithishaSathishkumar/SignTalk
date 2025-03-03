@@ -1,5 +1,4 @@
 # I am using mediapipe as a hand landmark processing and prediction and landmark detector and a Random Forest classifier as sign classifier.
-
 from flask import Blueprint
 import os
 import cv2

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
@@ -84,13 +79,6 @@ const About = () => {
           don’t know ASL.
         </Text>
       </Animatable.View>
-
-      {/* Call-to-Action Button with Gradient */}
-      {/* <TouchableOpacity onPress={() => router.push("/home")}>
-        <LinearGradient colors={["#E63946", "#F1FAEE"]} style={styles.button}>
-          <Text style={styles.buttonText}>Get Started</Text>
-        </LinearGradient>
-      </TouchableOpacity> */}
       <View style={{ height: 50 }} />
     </ScrollView>
   );

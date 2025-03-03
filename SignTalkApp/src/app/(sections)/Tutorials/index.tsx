@@ -60,11 +60,6 @@ export default function Tutorial() {
         </Text>
       </Animated.View>
 
-      {/* Get Started Button */}
-      {/* <Pressable style={styles.button} onPress={() => router.push("/home")}>
-        <Text style={styles.buttonText}>Get Started 🚀</Text>
-      </Pressable> */}
-
       <View style={{ height: 50 }} />
     </ScrollView>
   );

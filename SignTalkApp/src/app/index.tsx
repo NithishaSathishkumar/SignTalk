@@ -15,11 +15,6 @@ const sections = [
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
-      {/* App Title */}
-      {/* <View style={styles.appTitle}>
-        <Text style={styles.titleText}>SignTalk</Text>
-      </View> */}
-
       {/* Section Grid */}
       <FlatList
         data={sections}
