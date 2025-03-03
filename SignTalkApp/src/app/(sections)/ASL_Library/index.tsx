@@ -1,158 +1,221 @@
-import React from "react";
+// import React, { useState } from "react";
+// import { View, TextInput, FlatList, Text, StyleSheet } from "react-native";
+// import Video from "react-native-video";
+
+// const App = () => {
+//   const [query, setQuery] = useState("");
+//   const [results, setResults] = useState([]);
+//   const [selectedVideo, setSelectedVideo] = useState(null);
+
+//   const searchVideos = async () => {
+//     try {
+//       console.log("Search query:", query); // Log query
+//       const response = await fetch(
+//         `http://192.168.12.184:5001/search?query=${query}`
+//       );
+//       console.log("Response status:", response.status); // Log status
+//       const data = await response.json();
+//       console.log("Response data:", data); // Log data
+//       setResults(data);
+//     } catch (error) {
+//       console.error("Error fetching videos:", error);
+//     }
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <TextInput
+//         style={styles.searchBar}
+//         placeholder="Search for a sign..."
+//         value={query}
+//         onChangeText={setQuery}
+//         onSubmitEditing={searchVideos}
+//       />
+//       <FlatList
+//         data={results}
+//         keyExtractor={(item) => item.path}
+//         renderItem={({ item }) => (
+//           <Text
+//             style={styles.resultItem}
+//             onPress={() => setSelectedVideo(item.path)}
+//           >
+//             {item.name}
+//           </Text>
+//         )}
+//       />
+//       {selectedVideo && (
+//         <Video
+//           source={{ uri: `http://192.168.12.184:5001/video/${selectedVideo}` }}
+//           style={styles.videoPlayer}
+//           controls={true}
+//           onError={(error) => console.error("Video Error:", error)}
+//         />
+//       )}
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 16,
+//   },
+//   searchBar: {
+//     height: 40,
+//     borderColor: "gray",
+//     borderWidth: 1,
+//     paddingHorizontal: 8,
+//     marginBottom: 16,
+//   },
+//   resultItem: {
+//     padding: 8,
+//     fontSize: 16,
+//   },
+//   videoPlayer: {
+//     width: "100%",
+//     height: 300,
+//   },
+// });
+
+// export default App;
+
+import React, { useState } from "react";
 import {
   View,
+  TextInput,
+  FlatList,
   Text,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { Stack, useRouter } from "expo-router";
-import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
-import { LinearGradient } from "expo-linear-gradient";
-import * as Animatable from "react-native-animatable";
+import Video from "react-native-video";
 
-const About = () => {
-  const router = useRouter();
+const App = () => {
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
+  const searchVideos = async () => {
+    try {
+      console.log("Search query:", query);
+      const response = await fetch(
+        `http://192.168.12.184:5001/search?query=${query}`
+      );
+      console.log("Response status:", response.status);
+      const data = await response.json();
+      console.log("Response data:", data);
+      setResults(data);
+    } catch (error) {
+      console.error("Error fetching videos:", error);
+    }
+  };
 
   return (
-    <ScrollView style={styles.container}>
-      <Stack.Screen
-        options={{
-          title: "About Our App",
-          headerTintColor: "#FFFFFF", // Text and icon color
-          headerStyle: {
-            backgroundColor: "#457B9D", // Navigation bar background color
-          },
-          navigationBarColor: "#457B9D", // For Android navbar color
-        }}
+    <View style={styles.container}>
+      {/* Search Bar */}
+      <TextInput
+        style={styles.searchBar}
+        placeholder="🔎 Search for a sign..."
+        placeholderTextColor="gray"
+        value={query}
+        onChangeText={setQuery}
+        onSubmitEditing={searchVideos}
       />
-
-      <Text style={styles.heading}>Welcome to SignTalk</Text>
-      <Text style={styles.paragraph}>
-        Your go-to resource for learning and understanding American Sign
-        Language (ASL). Our app bridges the communication gap between deaf
-        individuals and those unfamiliar with sign language.
-      </Text>
-
-      <Text style={styles.subheading}>What We Offer:</Text>
-
-      {/* Features List with Animations */}
-      <Animatable.View
-        animation="fadeInUp"
-        delay={100}
-        style={styles.featureCard}
-      >
-        <FontAwesome5 name="book" size={24} color="#457B9D" />
-        <Text style={styles.featureTitle}>Comprehensive ASL Dictionary</Text>
-        <Text style={styles.featureText}>
-          Explore an extensive library of ASL vocabulary with clear text
-          descriptions, images, and video demonstrations.
-        </Text>
-      </Animatable.View>
-
-      <Animatable.View
-        animation="fadeInUp"
-        delay={200}
-        style={styles.featureCard}
-      >
-        <MaterialIcons name="translate" size={24} color="#457B9D" />
-        <Text style={styles.featureTitle}>Real-Time ASL Translation</Text>
-        <Text style={styles.featureText}>
-          Instantly translate finger-spelled signs using our real-time alphabet
-          translation feature.
-        </Text>
-      </Animatable.View>
-
-      <Animatable.View
-        animation="fadeInUp"
-        delay={300}
-        style={styles.featureCard}
-      >
-        <FontAwesome5 name="video" size={24} color="#457B9D" />
-        <Text style={styles.featureTitle}>Interactive Media</Text>
-        <Text style={styles.featureText}>
-          Watch engaging videos and images that demonstrate proper sign
-          execution.
-        </Text>
-      </Animatable.View>
-
-      <Animatable.View
-        animation="fadeInUp"
-        delay={400}
-        style={styles.featureCard}
-      >
-        <FontAwesome5 name="hands-helping" size={24} color="#457B9D" />
-        <Text style={styles.featureTitle}>Inclusive Communication</Text>
-        <Text style={styles.featureText}>
-          Foster better communication between the deaf community and those who
-          don’t know ASL.
-        </Text>
-      </Animatable.View>
-
-      {/* Call-to-Action Button with Gradient */}
-      {/* <TouchableOpacity onPress={() => router.push("/home")}>
-        <LinearGradient colors={["#E63946", "#F1FAEE"]} style={styles.button}>
-          <Text style={styles.buttonText}>Get Started</Text>
-        </LinearGradient>
-      </TouchableOpacity> */}
-      <View style={{ height: 50 }} />
-    </ScrollView>
+      {/* Search Results List */}
+      <FlatList
+        data={results}
+        keyExtractor={(item) => item.path}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.resultItem}
+            onPress={() => setSelectedVideo(item.path)}
+          >
+            <Text style={styles.resultText}>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+        ListEmptyComponent={
+          <Text style={styles.noResultsText}>No results found</Text>
+        }
+      />
+      {/* Video Player */}
+      {selectedVideo && (
+        <View style={styles.videoContainer}>
+          <Video
+            source={{ uri: `http://192.168.12.184:5001/video/${selectedVideo}` }}
+            style={styles.videoPlayer}
+            controls={true}
+            resizeMode="contain"
+            onError={(error) => console.error("Video Error:", error)}
+          />
+          <TouchableOpacity
+            style={styles.closeButton}
+            onPress={() => setSelectedVideo(null)}
+          >
+            <Text style={styles.closeButtonText}>Close</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    backgroundColor: "#F1FAEE",
+    flex: 1,
+    backgroundColor: "#f9f9f9",
+    padding: 16,
   },
-  heading: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#1D3557",
-    marginBottom: 10,
-  },
-  subheading: {
-    fontSize: 22,
-    fontWeight: "bold",
-    color: "#1D3557",
-    marginVertical: 10,
-  },
-  paragraph: {
+  searchBar: {
+    height: 50,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#d0d0d0",
+    paddingHorizontal: 12,
+    backgroundColor: "#ffffff",
+    marginBottom: 16,
     fontSize: 16,
-    color: "#457B9D",
-    marginBottom: 10,
   },
-  featureCard: {
-    backgroundColor: "#A8DADC",
-    padding: 15,
-    borderRadius: 12,
-    marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5, // For Android
+  resultItem: {
+    padding: 12,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderColor: "#dcdcdc",
+    borderWidth: 1,
+    marginBottom: 8,
   },
-  featureTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 5,
+  resultText: {
+    fontSize: 16,
+    color: "#333333",
   },
-  featureText: {
+  noResultsText: {
+    marginTop: 16,
+    textAlign: "center",
+    color: "#999999",
     fontSize: 14,
-    marginTop: 5,
   },
-  button: {
-    padding: 15,
-    borderRadius: 12,
+  videoContainer: {
+    marginTop: 16,
     alignItems: "center",
-    marginVertical: 20,
+    justifyContent: "center",
   },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 16,
+  videoPlayer: {
+    width: "100%",
+    height: 300,
+    backgroundColor: "#000000",
+    borderRadius: 8,
+  },
+  closeButton: {
+    marginTop: 8,
+    padding: 10,
+    backgroundColor: "#f05454",
+    borderRadius: 6,
+    alignItems: "center",
+  },
+  closeButtonText: {
+    color: "#ffffff",
     fontWeight: "bold",
   },
 });
 
-export default About;
+export default App;
+
