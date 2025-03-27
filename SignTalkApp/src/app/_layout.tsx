@@ -22,13 +22,13 @@ export function RootLayout() {
   return (
     <Stack
       screenOptions={{
-        title: "SignTalk",
+        title: "Tutorials",
         headerStyle: { backgroundColor: "#457B9D" },
         headerTintColor: "#F1FAEE", 
       }}
     >
       {/* Hides nav bar on the Home Page */}
-      <Stack.Screen name="index" options={{ title: "SignTalk" }} />
+      <Stack.Screen name="index" options={{ title: "SignEase" }} />
     </Stack>
   );
 }

@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import Video from "react-native-video";
+import { Stack } from "expo-router";
 
 const App = () => {
   const [query, setQuery] = useState("");
@@ -39,6 +40,17 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          title: "ASL Library",
+          headerTintColor: "#FFFFFF", // Text and icon color
+          headerStyle: {
+            backgroundColor: "#457B9D", // Navigation bar background color
+          },
+          navigationBarColor: "#457B9D", // For Android navbar color
+        }}
+      />
+
       {/* Search Bar */}
       <TextInput
         style={styles.searchBar}

@@ -33,6 +33,7 @@ const RTT = () => {
           headerShown: false,
         }}
       />
+
       <Text style={styles.header}>Real-Time ASL Translation</Text>
 
       {/* Markdown description section */}

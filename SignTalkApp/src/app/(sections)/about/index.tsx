@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
